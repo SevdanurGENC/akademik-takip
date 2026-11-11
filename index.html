@@ -1,0 +1,1026 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Akademik Takip</title>
+<style>
+:root{
+  --bg:#f5f6f8;--surface:#fff;--surface2:#f0f2f5;--text:#1a1e24;--muted:#5d6876;--border:#e1e5eb;
+  --accent:#2952d9;--accent-ink:#fff;--accent-soft:#e7ecfd;
+  --draft:#5f6773;--draft-bg:#eceef2;--active:#1c5ccc;--active-bg:#e3edfc;--action:#9a5300;--action-bg:#fcefd9;
+  --success:#157545;--success-bg:#def3e7;--fail:#b3261e;--fail-bg:#fbe5e3;
+  --makale:#6b46d6;--bildiri:#0d8383;--proje:#c0430d;
+  --radius:12px;--shadow:0 1px 2px rgba(16,24,40,.05),0 2px 6px rgba(16,24,40,.06);
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#111418;--surface:#191d23;--surface2:#21262d;--text:#e7eaee;--muted:#9aa4b1;--border:#2c323b;
+  --accent:#7d9bff;--accent-ink:#0d1220;--accent-soft:#1f2a47;
+  --draft:#a5adb8;--draft-bg:#272c33;--active:#8fb4ff;--active-bg:#1b2a44;--action:#f2b766;--action-bg:#3a2a12;
+  --success:#6fd39d;--success-bg:#163323;--fail:#ff8a80;--fail-bg:#3d1b19;
+  --makale:#a78bfa;--bildiri:#4fd1c5;--proje:#fb923c;--shadow:none;color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#111418;--surface:#191d23;--surface2:#21262d;--text:#e7eaee;--muted:#9aa4b1;--border:#2c323b;
+  --accent:#7d9bff;--accent-ink:#0d1220;--accent-soft:#1f2a47;
+  --draft:#a5adb8;--draft-bg:#272c33;--active:#8fb4ff;--active-bg:#1b2a44;--action:#f2b766;--action-bg:#3a2a12;
+  --success:#6fd39d;--success-bg:#163323;--fail:#ff8a80;--fail-bg:#3d1b19;
+  --makale:#a78bfa;--bildiri:#4fd1c5;--proje:#fb923c;--shadow:none;color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased}
+body.noscroll{overflow:hidden}
+button,input,select,textarea{font:inherit;color:inherit}
+h1,h2,h3{margin:0;line-height:1.25}
+h1{font-size:1.45rem;font-weight:650;letter-spacing:-.01em}
+h2{font-size:1.1rem;font-weight:650}
+h3{font-size:1rem;font-weight:600}
+code{background:var(--surface2);padding:1px 5px;border-radius:5px;font-size:.88em}
+a{color:var(--accent)}
+.muted{color:var(--muted)}.small{font-size:.85rem}
+.hidden{display:none!important}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--border);background:var(--surface);padding:8px 14px;border-radius:9px;cursor:pointer;font-weight:550;white-space:nowrap}
+.btn:hover{background:var(--surface2)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.primary:hover{filter:brightness(1.07)}
+.btn.danger{color:var(--fail);border-color:color-mix(in srgb,var(--fail) 35%,var(--border))}
+.btn.block{width:100%;justify-content:center;padding:11px}
+.btn:disabled{opacity:.6;cursor:progress}
+.link{background:none;border:0;color:var(--accent);cursor:pointer;padding:6px 0;font-size:.9rem}
+.icon{border:1px solid var(--border);background:var(--surface);width:38px;height:38px;border-radius:9px;display:inline-grid;place-items:center;cursor:pointer;color:var(--muted)}
+.icon:hover{background:var(--surface2);color:var(--text)}
+.icon svg{width:18px;height:18px}
+
+/* auth */
+.auth{min-height:100vh;display:grid;place-items:center;padding:24px 16px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
+.auth-card{width:100%;max-width:380px;padding:28px;display:flex;flex-direction:column;gap:14px}
+.auth-card.wide{max-width:640px}
+.logo{width:44px;height:44px;border-radius:12px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center}
+.logo svg{width:24px;height:24px}
+.err{color:var(--fail);font-size:.9rem;min-height:1em}
+.err:empty{display:none}
+.warn{background:var(--action-bg);color:var(--action);padding:10px 12px;border-radius:9px;font-size:.9rem}
+.note{background:var(--surface2);padding:10px 12px;border-radius:9px;font-size:.88rem;color:var(--muted)}
+
+/* forms */
+.fld{display:flex;flex-direction:column;gap:5px;font-size:.85rem;color:var(--muted);font-weight:550}
+.fld>span{display:flex;justify-content:space-between;gap:8px}
+.fld small{font-weight:400}
+input[type=text],input[type=password],input[type=date],input[type=number],input[type=search],select,textarea{
+  width:100%;background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:9px 11px;color:var(--text);font-weight:400;font-size:.95rem}
+textarea{min-height:84px;resize:vertical}
+input:focus,select:focus,textarea:focus{outline:2px solid color-mix(in srgb,var(--accent) 45%,transparent);outline-offset:0;border-color:var(--accent)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 14px}
+.grid .full{grid-column:1/-1}
+@media (max-width:560px){.grid{grid-template-columns:1fr}}
+.seg{display:inline-flex;background:var(--surface2);border-radius:10px;padding:3px;gap:2px;border:0;margin:0;flex-wrap:wrap}
+.seg label{cursor:pointer}
+.seg input{position:absolute;opacity:0;pointer-events:none}
+.seg span{display:block;padding:6px 14px;border-radius:8px;font-weight:550;font-size:.9rem;color:var(--muted)}
+.seg input:checked+span{background:var(--surface);color:var(--text);box-shadow:var(--shadow)}
+.seg input:focus-visible+span{outline:2px solid var(--accent)}
+
+/* shell */
+.top{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--border)}
+.top-in{max-width:1180px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:14px}
+.brand{display:flex;align-items:center;gap:9px;font-weight:650}
+.brand .logo{width:32px;height:32px;border-radius:9px}
+.brand .logo svg{width:18px;height:18px}
+.tabs{display:flex;gap:2px;overflow-x:auto;flex:1;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{border:0;background:none;padding:8px 12px;border-radius:8px;cursor:pointer;color:var(--muted);font-weight:550;white-space:nowrap}
+.tab:hover{background:var(--surface2);color:var(--text)}
+.tab.on{background:var(--surface);color:var(--text);box-shadow:var(--shadow)}
+.tab .cnt{font-size:.75rem;color:var(--muted);margin-left:4px}
+.top-actions{display:flex;align-items:center;gap:8px}
+.savestate{font-size:.8rem;color:var(--muted);white-space:nowrap}
+.savestate.err{color:var(--fail)}
+.savestate::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--success);margin-right:6px;vertical-align:1px}
+.savestate.pending::before,.savestate.saving::before{background:var(--action)}
+.savestate.err::before{background:var(--fail)}
+@media (max-width:760px){
+  .top-in{flex-wrap:wrap;gap:8px}
+  .tabs{order:3;flex-basis:100%}
+  .brand span{display:none}
+  .top-actions{margin-left:auto}
+  .savestate{display:none}
+  .hide-sm{display:none}
+}
+main{max-width:1180px;margin:0 auto;padding:22px 16px 80px}
+
+/* chips & badges */
+.badge{display:inline-flex;align-items:center;gap:6px;font-size:.78rem;font-weight:600;padding:3px 9px;border-radius:99px;white-space:nowrap}
+.badge::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.c-draft{color:var(--draft);background:var(--draft-bg)}
+.c-active{color:var(--active);background:var(--active-bg)}
+.c-action{color:var(--action);background:var(--action-bg)}
+.c-success{color:var(--success);background:var(--success-bg)}
+.c-fail{color:var(--fail);background:var(--fail-bg)}
+.tchip{font-size:.72rem;font-weight:650;text-transform:uppercase;letter-spacing:.04em}
+.t-makale{color:var(--makale)}.t-bildiri{color:var(--bildiri)}.t-proje{color:var(--proje)}
+
+/* dashboard */
+.page-head{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;margin-bottom:18px;flex-wrap:wrap}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:22px}
+@media (max-width:760px){.stats{grid-template-columns:1fr}}
+.stat{padding:16px;cursor:pointer;text-align:left;border:1px solid var(--border);background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow);border-top:3px solid var(--tc)}
+.stat:hover{border-color:color-mix(in srgb,var(--tc) 40%,var(--border))}
+.stat .num{font-size:1.9rem;font-weight:700;line-height:1.1;margin:4px 0 8px}
+.stat .row{display:flex;gap:6px;flex-wrap:wrap}
+.panels{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:860px){.panels{grid-template-columns:1fr}}
+.panel{padding:16px}
+.panel h2{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.panel h2 .n{font-size:.8rem;color:var(--muted);font-weight:500}
+.panel .empty{color:var(--muted);font-size:.9rem;padding:6px 0}
+.mini{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;width:100%;text-align:left;background:none;border:0;border-top:1px solid var(--border);padding:9px 2px;cursor:pointer}
+.mini:first-of-type{border-top:0}
+.mini:hover .mini-title{color:var(--accent)}
+.mini-title{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:500}
+.mini-sub{display:block;font-size:.8rem;color:var(--muted);font-weight:400;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mini-right{font-size:.8rem;color:var(--muted);white-space:nowrap;text-align:right}
+.due-over{color:var(--fail)!important;font-weight:600}
+.due-soon{color:var(--action)!important;font-weight:600}
+
+/* list */
+.toolbar{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.toolbar input{flex:1 1 240px}
+.toolbar select{flex:0 1 220px;width:auto}
+.sumrow{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.sumrow button{border:0;cursor:pointer}
+.sumrow button.on{outline:2px solid currentColor}
+.items{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px}
+@media (max-width:400px){.items{grid-template-columns:1fr}}
+.item{padding:14px 16px;cursor:pointer;display:flex;flex-direction:column;gap:6px;border-left:3px solid var(--sc)}
+.item:hover{border-color:var(--border);border-left-color:var(--sc);box-shadow:0 4px 14px rgba(16,24,40,.08)}
+.item-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.item h3{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.venue{color:var(--muted);font-size:.9rem}
+.meta{display:flex;flex-direction:column;gap:1px;font-size:.8rem;color:var(--muted);margin-top:2px}
+.ext{font-size:.85rem;font-weight:550;text-decoration:none;align-self:flex-start;margin-top:2px}
+.ext:hover{text-decoration:underline}
+.emptybox{padding:40px 16px;text-align:center;color:var(--muted);border:1px dashed var(--border);border-radius:var(--radius)}
+
+/* modal */
+.modal{position:fixed;inset:0;z-index:50}
+.backdrop{position:absolute;inset:0;background:rgba(10,14,20,.45);display:flex;align-items:flex-start;justify-content:center;padding:5vh 12px;overflow-y:auto}
+.dialog{background:var(--surface);border-radius:14px;width:100%;max-width:620px;box-shadow:0 20px 60px rgba(0,0,0,.3);border:1px solid var(--border)}
+.dialog.wide{max-width:780px}
+.dlg-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:18px 20px 12px}
+.dlg-body{padding:4px 20px 18px;display:flex;flex-direction:column;gap:16px}
+.dlg-foot{display:flex;justify-content:flex-end;gap:8px;padding:14px 20px;border-top:1px solid var(--border)}
+.x{border:0;background:none;font-size:1.6rem;line-height:1;cursor:pointer;color:var(--muted);padding:0 4px}
+.form .grid{padding:4px 20px 18px}
+.form .seg{margin:0 20px 14px}
+.dtitle{font-size:1.2rem;font-weight:650;margin:6px 0 0}
+.drow{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+dl.kv{display:grid;grid-template-columns:minmax(120px,200px) 1fr;gap:6px 14px;margin:0;font-size:.92rem}
+dl.kv dt{color:var(--muted)}
+dl.kv dd{margin:0;word-break:break-word}
+@media (max-width:520px){dl.kv{grid-template-columns:1fr}dl.kv dd{margin-bottom:6px}}
+.notes{white-space:pre-wrap;background:var(--surface2);padding:10px 12px;border-radius:9px;font-size:.92rem}
+.box{border:1px solid var(--border);border-radius:11px;padding:14px}
+.box h3{margin-bottom:10px}
+.evform{display:grid;grid-template-columns:150px 1fr;gap:10px}
+.evform .full{grid-column:1/-1}
+@media (max-width:520px){.evform{grid-template-columns:1fr}}
+.tl{list-style:none;margin:0;padding:0;position:relative}
+.tl li{position:relative;padding:0 0 14px 22px}
+.tl li::before{content:"";position:absolute;left:5px;top:16px;bottom:0;width:2px;background:var(--border)}
+.tl li:last-child::before{display:none}
+.tl .dot{position:absolute;left:0;top:5px;width:12px;height:12px;border-radius:50%;border:2px solid currentColor;background:var(--surface)}
+.tl .when{font-size:.8rem;color:var(--muted)}
+.tl .n{font-size:.9rem;white-space:pre-wrap;margin-top:2px}
+.tl .del{float:right;border:0;background:none;color:var(--muted);cursor:pointer;font-size:.8rem}
+.tl .del:hover{color:var(--fail)}
+
+/* settings */
+.set{display:grid;gap:14px;max-width:760px}
+.set .card{padding:18px}
+.set .card h2{margin-bottom:8px}
+.set .btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--text);color:var(--bg);padding:10px 16px;border-radius:10px;font-size:.9rem;z-index:100;box-shadow:0 8px 24px rgba(0,0,0,.25);max-width:calc(100% - 32px)}
+.toast.err{background:var(--fail);color:#fff}
+.spin{display:grid;place-items:center;min-height:100vh;color:var(--muted)}
+</style>
+</head>
+<body>
+<div id="app"><div class="spin">Yükleniyor…</div></div>
+<div id="modal" class="modal hidden"></div>
+<noscript>Bu uygulama JavaScript gerektirir.</noscript>
+<script>
+'use strict';
+/* ================== Ayarlar ================== */
+const ITER = 600000;                  // PBKDF2 tur sayısı
+const STALE_DAYS = 60;                // "uzun süredir haber yok" eşiği
+const LS = { vault:'akt_vault', data:'akt_data', lock:'akt_lock_min', theme:'akt_theme' };
+
+const ST = (k,t,c)=>({k,t,c});
+const TYPES = {
+  makale:{
+    label:'Makale', plural:'Makaleler', venue:'Dergi', refLabel:'Makale no (Manuscript ID)', linkLabel:'Gönderim sistemi linki',
+    venueList:[],
+    statuses:[
+      ST('hazirlaniyor','Hazırlanıyor','draft'), ST('gonderildi','Gönderildi','active'),
+      ST('on_inceleme','Editör / ön inceleme','active'), ST('hakemde','Hakem değerlendirmesinde','active'),
+      ST('minor','Minör revizyon','action'), ST('major','Majör revizyon','action'),
+      ST('rev_gonderildi','Revizyon gönderildi','active'), ST('kabul','Kabul edildi','success'),
+      ST('yayinlandi','Yayımlandı','success'), ST('ret','Reddedildi','fail'), ST('geri_cekildi','Geri çekildi','fail')
+    ],
+    extra:[
+      {k:'index',t:'Dizin',type:'select',opts:['','SSCI','SCIE','AHCI','ESCI','Scopus','TR Dizin','Diğer']},
+      {k:'doi',t:'DOI'}
+    ]
+  },
+  bildiri:{
+    label:'Bildiri', plural:'Bildiriler', venue:'Kongre / sempozyum', refLabel:'Bildiri no', linkLabel:'Kongre / gönderim linki',
+    venueList:[],
+    statuses:[
+      ST('hazirlaniyor','Hazırlanıyor','draft'), ST('ozet_gonderildi','Özet gönderildi','active'),
+      ST('ozet_kabul','Özet kabul edildi','action'), ST('tam_metin','Tam metin gönderildi','active'),
+      ST('degerlendirmede','Değerlendirmede','active'), ST('kabul','Kabul edildi','success'),
+      ST('sunuldu','Sunuldu','success'), ST('yayinlandi','Bildiri kitabında yayımlandı','success'),
+      ST('ret','Reddedildi','fail'), ST('geri_cekildi','Geri çekildi','fail')
+    ],
+    extra:[
+      {k:'eventDate',t:'Etkinlik tarihi',type:'date'}, {k:'location',t:'Yer'},
+      {k:'presType',t:'Sunum türü',type:'select',opts:['','Sözlü','Poster','Çevrimiçi','Davetli']},
+      {k:'pubType',t:'Yayın şekli',type:'select',opts:['','Özet','Tam metin','Yayımlanmayacak']}
+    ]
+  },
+  proje:{
+    label:'Proje', plural:'Projeler', venue:'Kurum / program', refLabel:'Başvuru / proje no', linkLabel:'Başvuru sistemi linki',
+    venueList:['TÜBİTAK 1001','TÜBİTAK 1002-A','TÜBİTAK 1002-B','TÜBİTAK 1005','TÜBİTAK 3001','TÜBİTAK 3501','TÜBİTAK 1512','TÜBİTAK 2209-A','TÜBİTAK 2209-B','TÜBİTAK 2219','TÜBİTAK 2224-A','BAP','Kalkınma Ajansı','Ufuk Avrupa','Erasmus+'],
+    statuses:[
+      ST('hazirlaniyor','Hazırlanıyor','draft'), ST('basvuruldu','Başvuru yapıldı','active'),
+      ST('on_degerlendirme','Ön / idari inceleme','active'), ST('panel','Panel değerlendirmesinde','active'),
+      ST('ek_bilgi','Ek bilgi / revizyon istendi','action'), ST('desteklendi','Desteklenmesine karar verildi','success'),
+      ST('yurutuluyor','Yürütülüyor','success'), ST('tamamlandi','Tamamlandı','success'),
+      ST('desteklenmedi','Desteklenmedi','fail'), ST('geri_cekildi','Geri çekildi','fail')
+    ],
+    extra:[
+      {k:'role',t:'Rolüm',type:'select',opts:['','Yürütücü','Araştırmacı','Danışman','Bursiyer']},
+      {k:'budget',t:'Bütçe'}, {k:'duration',t:'Süre (ay)',type:'number'}, {k:'startDate',t:'Başlangıç tarihi',type:'date'}
+    ]
+  }
+};
+const CATS = { draft:'Hazırlanıyor', active:'Süreçte', action:'Aksiyon bekliyor', success:'Olumlu', fail:'Olumsuz' };
+const CAT_ORDER = ['action','active','draft','success','fail'];
+
+/* ================== Yardımcılar ================== */
+const $ = s => document.querySelector(s);
+const $app = $('#app');
+const enc = new TextEncoder(), dec = new TextDecoder();
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid = () => (crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36)+Math.random().toString(36).slice(2));
+const lower = s => String(s ?? '').toLocaleLowerCase('tr');
+const todayISO = () => { const d = new Date(); return new Date(d.getTime() - d.getTimezoneOffset()*6e4).toISOString().slice(0,10); };
+const daysBetween = (a,b) => Math.round((Date.parse(b) - Date.parse(a)) / 864e5);
+const ago = d => daysBetween(d, todayISO());
+const fmt = d => { if(!d) return ''; const [y,m,dd] = d.split('-'); return dd && m ? `${dd}.${m}.${y}` : d; };
+const rel = n => n === 0 ? 'bugün' : n === 1 ? 'dün' : n === -1 ? 'yarın' : n > 0 ? `${n} gün önce` : `${-n} gün sonra`;
+const dur = n => { if(n < 0) return `${-n} gün sonra`; if(n < 60) return `${n} gün`; const m = Math.floor(n/30.44); return m < 24 ? `${n} gün (~${m} ay)` : `${n} gün (~${(n/365.25).toFixed(1)} yıl)`; };
+const safeUrl = u => { u = String(u||'').trim(); if(!u) return ''; if(!/^[a-z][a-z0-9+.-]*:/i.test(u)) u = 'https://' + u; return /^https?:/i.test(u) ? u : ''; };
+const lsGet = k => { try { return localStorage.getItem(k); } catch { return null; } };
+const lsSet = (k,v) => { try { localStorage.setItem(k,v); return true; } catch { return false; } };
+const lsDel = k => { try { localStorage.removeItem(k); } catch {} };
+const ICON = {
+  book:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5V5a2 2 0 0 1 2-2h13v16H6.5A2.5 2.5 0 0 0 4 21.5v-2z"/><path d="M8 7h7M8 11h7"/></svg>',
+  lock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>',
+  gear:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>'
+};
+
+let toastTimer;
+function toast(msg, kind){
+  let t = $('.toast'); if(!t){ t = document.createElement('div'); document.body.appendChild(t); }
+  t.className = 'toast' + (kind==='err' ? ' err' : ''); t.textContent = msg;
+  clearTimeout(toastTimer); toastTimer = setTimeout(()=>t.remove(), kind==='err' ? 7000 : 3200);
+}
+
+/* ================== Şifreleme (AES-GCM + PBKDF2) ================== */
+const b64 = buf => { const a = new Uint8Array(buf); let s=''; for(let i=0;i<a.length;i+=0x8000) s += String.fromCharCode.apply(null, a.subarray(i,i+0x8000)); return btoa(s); };
+const unb64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+async function deriveKey(pw, salt, iter){
+  const base = await crypto.subtle.importKey('raw', enc.encode(pw), 'PBKDF2', false, ['deriveKey']);
+  return crypto.subtle.deriveKey({name:'PBKDF2', salt, iterations:iter, hash:'SHA-256'}, base, {name:'AES-GCM', length:256}, false, ['encrypt','decrypt']);
+}
+async function encryptJSON(key, obj){
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const ct = await crypto.subtle.encrypt({name:'AES-GCM', iv}, key, enc.encode(JSON.stringify(obj)));
+  return { v:1, iv:b64(iv), ct:b64(ct) };
+}
+async function decryptJSON(key, box){
+  const pt = await crypto.subtle.decrypt({name:'AES-GCM', iv:unb64(box.iv)}, key, unb64(box.ct));
+  return JSON.parse(dec.decode(pt));
+}
+
+/* ================== Durum ================== */
+const S = { vault:null, cfg:null, key:null, salt:null, iter:ITER, db:null, sha:null, view:'panel', filters:{}, dirty:false };
+
+/* ================== GitHub API ================== */
+const GH = {
+  base:'https://api.github.com',
+  headers(cfg, raw){ return { Authorization:'Bearer '+cfg.token, Accept: raw ? 'application/vnd.github.raw+json' : 'application/vnd.github+json', 'X-GitHub-Api-Version':'2022-11-28' }; },
+  enc(p){ return p.split('/').filter(Boolean).map(encodeURIComponent).join('/'); },
+  async req(cfg, url, opt={}, raw=false){
+    try {
+      const h = this.headers(cfg, raw); if(opt.body) h['Content-Type'] = 'application/json';
+      return await fetch(url, {...opt, headers:h, cache:'no-store'});
+    } catch { throw new Error("GitHub'a ulaşılamadı. İnternet bağlantınızı kontrol edin."); }
+  },
+  error(status, m){
+    let msg;
+    if(status === 401) msg = "GitHub token'ı geçersiz ya da süresi dolmuş.";
+    else if(status === 403) msg = 'GitHub erişimi reddetti (token yetkisi yetersiz ya da istek limiti aşıldı). ' + (m||'');
+    else if(status === 404) msg = "Depo ya da dosya bulunamadı (veya token'ın bu depoya erişimi yok).";
+    else msg = `GitHub hatası (${status}): ${m||''}`;
+    const e = new Error(msg.trim()); e.status = status; return e;
+  },
+  async fail(r){ let m=''; try { m = (await r.json()).message || ''; } catch {} return this.error(r.status, m); },
+  async repo(cfg, full){
+    const r = await this.req(cfg, `${this.base}/repos/${full}`);
+    if(r.status === 404){ const e = new Error(`"${full}" deposu bulunamadı ya da token'ın bu depoya erişimi yok.`); e.status = 404; throw e; }
+    if(!r.ok) throw await this.fail(r);
+    return r.json();
+  },
+  async get(cfg, full, path, branch){
+    const url = `${this.base}/repos/${full}/contents/${this.enc(path)}` + (branch ? '?ref='+encodeURIComponent(branch) : '');
+    const r = await this.req(cfg, url);
+    if(r.status === 404) return null;
+    if(!r.ok) throw await this.fail(r);
+    const j = await r.json();
+    if(Array.isArray(j)) throw new Error(`"${path}" bir klasör, dosya değil.`);
+    let text;
+    if(j.encoding === 'base64') text = dec.decode(unb64((j.content||'').replace(/\s/g,'')));
+    else { const r2 = await this.req(cfg, url, {}, true); if(!r2.ok) throw await this.fail(r2); text = await r2.text(); }
+    return { text, sha:j.sha };
+  },
+  async put(cfg, full, path, text, sha, branch, message){
+    const body = { message, content: b64(enc.encode(text)) };
+    if(sha) body.sha = sha; if(branch) body.branch = branch;
+    const r = await this.req(cfg, `${this.base}/repos/${full}/contents/${this.enc(path)}`, {method:'PUT', body:JSON.stringify(body)});
+    if(!r.ok){
+      let m=''; try { m = (await r.json()).message || ''; } catch {}
+      if(r.status === 409 || (r.status === 422 && /sha/i.test(m))){ const e = new Error('Çakışma'); e.conflict = true; throw e; }
+      throw this.error(r.status, m);
+    }
+    return (await r.json()).content.sha;
+  }
+};
+const siteRepo = cfg => `${cfg.owner}/${cfg.repo}`;
+const vaultPath = cfg => (cfg.siteDir ? cfg.siteDir + '/' : '') + 'vault.json';
+const dataRepo = () => S.cfg.dataRepo || siteRepo(S.cfg);
+const dataBranch = () => S.cfg.dataRepo ? null : S.cfg.branch;
+
+/* ================== Kasa (vault) ve veri ================== */
+async function fetchVault(){
+  let remote = null, local = null;
+  try {
+    const r = await fetch('vault.json?t=' + Date.now(), {cache:'no-store'});
+    if(r.ok){ const j = await r.json(); if(j && j.ct && j.salt) remote = j; }
+  } catch {}
+  try { const l = lsGet(LS.vault); if(l) local = JSON.parse(l); } catch {}
+  if(remote && local) return (local.t||0) > (remote.t||0) ? local : remote;
+  return remote || local;
+}
+async function buildVault(){
+  const box = await encryptJSON(S.key, S.cfg);
+  return { v:1, kdf:'PBKDF2-SHA256', iter:S.iter, salt:S.salt, iv:box.iv, ct:box.ct, t:Date.now() };
+}
+async function storeVault(vault){
+  S.vault = vault;
+  lsSet(LS.vault, JSON.stringify(vault));
+  if(S.cfg.storage === 'github'){
+    const p = vaultPath(S.cfg);
+    const cur = await GH.get(S.cfg, siteRepo(S.cfg), p, S.cfg.branch);
+    await GH.put(S.cfg, siteRepo(S.cfg), p, JSON.stringify(vault, null, 1) + '\n', cur && cur.sha, S.cfg.branch, 'Kasa güncellendi');
+  }
+}
+const emptyDb = () => ({ version:1, items:[], deleted:[], updatedAt:new Date().toISOString() });
+function normalizeDb(db){
+  db.items = Array.isArray(db.items) ? db.items : [];
+  db.deleted = Array.isArray(db.deleted) ? db.deleted : [];
+  db.items = db.items.filter(it => it && it.id && TYPES[it.type]);
+  db.items.forEach(it => { if(!Array.isArray(it.history)) it.history = []; it.history.forEach(h => { if(!h.id) h.id = uid(); }); });
+  return db;
+}
+async function readRemote(){
+  if(S.cfg.storage === 'local'){ const t = lsGet(LS.data); return t ? { text:t, sha:null } : null; }
+  return GH.get(S.cfg, dataRepo(), S.cfg.dataPath, dataBranch());
+}
+async function decodeData(text){
+  let box; try { box = JSON.parse(text); } catch { throw new Error('Veri dosyası okunamadı (bozuk JSON).'); }
+  try { return normalizeDb(await decryptJSON(S.key, box)); }
+  catch { throw new Error('Veri dosyası bu şifreyle çözülemedi. Farklı bir şifreyle oluşturulmuş olabilir.'); }
+}
+async function loadData(){
+  const r = await readRemote();
+  if(!r){ S.db = emptyDb(); S.sha = null; await saveNow(); return; }
+  S.db = await decodeData(r.text); S.sha = r.sha;
+}
+
+/* ================== Kaydetme ================== */
+let saveTimer = null, saving = Promise.resolve();
+function setSaveState(s){
+  S.saveState = s;
+  const el = $('#saveState'); if(!el) return;
+  el.className = 'savestate ' + s;
+  el.textContent = { pending:'Kaydedilecek…', saving:'Kaydediliyor…', ok:'Kaydedildi', err:'Kaydedilemedi' }[s] || '';
+}
+function persist(){
+  S.db.updatedAt = new Date().toISOString(); S.dirty = true; setSaveState('pending');
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => { saving = saving.then(saveNow).catch(()=>{}); }, 500);
+}
+async function flush(){
+  if(saveTimer){ clearTimeout(saveTimer); saveTimer = null; if(S.dirty) saving = saving.then(saveNow).catch(()=>{}); }
+  await saving;
+}
+async function saveNow(){
+  saveTimer = null; S.dirty = false; setSaveState('saving');
+  const text = JSON.stringify(await encryptJSON(S.key, S.db));
+  try {
+    if(S.cfg.storage === 'local'){ if(!lsSet(LS.data, text)) throw new Error('Tarayıcı depolamasına yazılamadı.'); }
+    else S.sha = await GH.put(S.cfg, dataRepo(), S.cfg.dataPath, text, S.sha, dataBranch(), 'Veri güncellendi');
+    setSaveState('ok');
+  } catch(e){
+    S.dirty = true; setSaveState('err');
+    if(e.conflict) showConflict(); else toast(e.message, 'err');
+    throw e;
+  }
+}
+function mergeDb(a, b){
+  const deleted = new Set([...(a.deleted||[]), ...(b.deleted||[])]);
+  const map = new Map();
+  for(const it of [...a.items, ...b.items]){
+    if(deleted.has(it.id)) continue;
+    const cur = map.get(it.id);
+    if(!cur || (it.updatedAt||'') > (cur.updatedAt||'')) map.set(it.id, it);
+  }
+  return { version:1, items:[...map.values()], deleted:[...deleted], updatedAt:new Date().toISOString() };
+}
+function showConflict(){
+  openModal(`<div class="dlg-head"><h2>Veriler başka yerde değişmiş</h2></div>
+  <div class="dlg-body"><p>Siz bu sayfadayken veriler başka bir cihazda ya da sekmede güncellenmiş. Ne yapalım?</p>
+  <p class="muted small"><b>Birleştir</b>: iki taraftaki kayıtlar birleştirilir; aynı kayıt iki yerde değiştiyse en son düzenlenen kalır.</p></div>
+  <div class="dlg-foot"><button class="btn" data-act="conflictRemote">Uzaktakini yükle</button><button class="btn primary" data-act="conflictMerge">Birleştir ve kaydet</button></div>`);
+}
+
+/* ================== Ekranlar: kurulum / giriş ================== */
+function guessRepo(){
+  const h = location.hostname;
+  if(!h.endsWith('.github.io')) return { owner:'', repo:'' };
+  const owner = h.split('.')[0];
+  const seg = location.pathname.split('/').filter(Boolean)[0];
+  return { owner, repo: seg && !seg.includes('.') ? seg : h };
+}
+function renderSetup(fromLogin){
+  const g = guessRepo();
+  $app.innerHTML = `<div class="auth"><form class="card auth-card wide" id="setupForm" autocomplete="off">
+    <div class="logo">${ICON.book}</div>
+    <div><h1>İlk kurulum</h1><p class="muted" style="margin:6px 0 0">Bir kez yapılır. Ayarlarınız ve GitHub token'ınız seçeceğiniz şifreyle şifrelenip <code>vault.json</code> dosyasında saklanır. Şifreniz hiçbir yere kaydedilmez, unutursanız veriler açılamaz.</p></div>
+    ${fromLogin ? '<div class="warn">Zaten bir kurulum var. Yeni kurulum eskisinin yerine geçer; eski şifreyle şifrelenmiş veri dosyası yeni şifreyle açılamaz (farklı bir veri yolu seçebilirsiniz).</div>' : ''}
+    <fieldset class="seg">
+      <label><input type="radio" name="storage" value="github" checked><span>GitHub'da sakla (önerilen)</span></label>
+      <label><input type="radio" name="storage" value="local"><span>Yalnızca bu tarayıcı (deneme)</span></label>
+    </fieldset>
+    <div id="ghFields" class="grid">
+      <label class="fld"><span>GitHub kullanıcı adı</span><input type="text" name="owner" value="${esc(g.owner)}" placeholder="kullaniciadi"></label>
+      <label class="fld"><span>Sitenin deposu</span><input type="text" name="repo" value="${esc(g.repo)}" placeholder="akademik-takip"></label>
+      <label class="fld"><span>Dal (branch)</span><input type="text" name="branch" value="main"></label>
+      <label class="fld"><span>Site klasörü <small>boş = kök</small></span><input type="text" name="siteDir" placeholder="ör. docs"></label>
+      <label class="fld full"><span>Veri deposu <small>opsiyonel, private önerilir</small></span><input type="text" name="dataRepo" placeholder="kullaniciadi/akademik-veri  (boş = sitenin deposu)"></label>
+      <label class="fld full"><span>Veri dosyası yolu</span><input type="text" name="dataPath" value="data/akademik.enc.json"></label>
+      <label class="fld full"><span>GitHub token <small>fine-grained, Contents: Read & write</small></span><input type="password" name="token" placeholder="github_pat_…" autocomplete="off"></label>
+    </div>
+    <div class="grid">
+      <label class="fld"><span>Şifre <small>en az 10 karakter</small></span><input type="password" name="pw" autocomplete="new-password"></label>
+      <label class="fld"><span>Şifre (tekrar)</span><input type="password" name="pw2" autocomplete="new-password"></label>
+    </div>
+    <div class="err"></div>
+    <button class="btn primary block" type="submit">Kurulumu tamamla</button>
+    ${fromLogin ? '<button type="button" class="link" data-act="backLogin">Girişe dön</button>' : ''}
+  </form></div>`;
+}
+function renderLogin(msg){
+  $app.innerHTML = `<div class="auth"><form class="card auth-card" id="loginForm">
+    <div class="logo">${ICON.book}</div>
+    <div><h1>Akademik Takip</h1><p class="muted" style="margin:6px 0 0">Devam etmek için şifrenizi girin.</p></div>
+    <label class="fld"><span>Şifre</span><input type="password" name="pw" autocomplete="current-password" autofocus></label>
+    <div class="err">${esc(msg||'')}</div>
+    <button class="btn primary block" type="submit">Giriş</button>
+    <button type="button" class="link" data-act="goSetup">Yeni kurulum yap</button>
+  </form></div>`;
+  setTimeout(() => { const i = $('#loginForm input'); if(i) i.focus(); }, 30);
+}
+function renderTokenRenew(msg){
+  $app.innerHTML = `<div class="auth"><form class="card auth-card" id="renewForm">
+    <div class="logo">${ICON.lock}</div>
+    <div><h1>Token yenilenmeli</h1><p class="muted" style="margin:6px 0 0">${esc(msg)} Yeni bir fine-grained token girin; şifreli kasaya kaydedilir.</p></div>
+    <label class="fld"><span>Yeni GitHub token</span><input type="password" name="token" placeholder="github_pat_…" autocomplete="off"></label>
+    <div class="err"></div>
+    <button class="btn primary block" type="submit">Kaydet ve devam et</button>
+    <button type="button" class="link" data-act="lock">Çıkış</button>
+  </form></div>`;
+}
+function setErr(f, m){ const e = f.querySelector('.err'); if(e) e.textContent = m || ''; }
+function busy(f, on, label){
+  const b = f.querySelector('button[type=submit]'); if(!b) return;
+  if(on){ b.dataset.label = b.textContent; b.textContent = label || 'Bekleyin…'; b.disabled = true; }
+  else { b.textContent = b.dataset.label || b.textContent; b.disabled = false; }
+}
+
+async function onSetup(f){
+  const fd = Object.fromEntries(new FormData(f)); setErr(f,'');
+  if((fd.pw||'').length < 10) return setErr(f, 'Şifre en az 10 karakter olmalı.');
+  if(fd.pw !== fd.pw2) return setErr(f, 'Şifreler eşleşmiyor.');
+  let cfg;
+  if(fd.storage === 'github'){
+    cfg = { storage:'github', owner:fd.owner.trim(), repo:fd.repo.trim(), branch:(fd.branch||'').trim() || 'main',
+      siteDir:(fd.siteDir||'').trim().replace(/^\/+|\/+$/g,''), dataRepo:(fd.dataRepo||'').trim().replace(/^https?:\/\/github\.com\//,'').replace(/\/+$/,''),
+      dataPath:(fd.dataPath||'').trim().replace(/^\/+/,'') || 'data/akademik.enc.json', token:(fd.token||'').trim() };
+    if(!cfg.owner || !cfg.repo) return setErr(f, 'Kullanıcı adı ve depo adı gerekli.');
+    if(!cfg.token) return setErr(f, 'GitHub token gerekli.');
+    if(cfg.dataRepo && !/^[\w.-]+\/[\w.-]+$/.test(cfg.dataRepo)) return setErr(f, 'Veri deposu "kullanici/depo" biçiminde olmalı.');
+  } else cfg = { storage:'local' };
+  busy(f, true, 'Kuruluyor…');
+  try {
+    if(cfg.storage === 'github'){
+      await GH.repo(cfg, siteRepo(cfg));
+      if(cfg.dataRepo) await GH.repo(cfg, cfg.dataRepo);
+    }
+    const salt = crypto.getRandomValues(new Uint8Array(16));
+    S.key = await deriveKey(fd.pw, salt, ITER); S.salt = b64(salt); S.iter = ITER; S.cfg = cfg;
+    await storeVault(await buildVault());
+    if(cfg.storage === 'local') lsDel(LS.data);
+    await loadData();
+    startApp();
+    toast(cfg.storage === 'github' ? 'Kurulum tamamlandı. vault.json depoya yazıldı; diğer cihazlarda ~1 dk sonra şifreyle giriş yapabilirsiniz.' : 'Kurulum tamamlandı.');
+  } catch(e){ S.key = null; S.cfg = null; setErr(f, e.message); busy(f, false); }
+}
+async function onLogin(f){
+  const pw = f.pw.value; setErr(f,''); if(!pw) return setErr(f, 'Şifre girin.');
+  busy(f, true, 'Açılıyor…');
+  try {
+    const v = S.vault;
+    const key = await deriveKey(pw, unb64(v.salt), v.iter || ITER);
+    let cfg; try { cfg = await decryptJSON(key, v); } catch { throw new Error('Şifre hatalı.'); }
+    S.key = key; S.cfg = cfg; S.salt = v.salt; S.iter = v.iter || ITER;
+    lsSet(LS.vault, JSON.stringify(v));
+    try { await loadData(); }
+    catch(e){ if(e.status === 401 || e.status === 403){ renderTokenRenew(e.message); return; } throw e; }
+    startApp();
+  } catch(e){ S.key = null; S.cfg = null; setErr(f, e.message); busy(f, false); }
+}
+async function onRenew(f){
+  const token = f.token.value.trim(); setErr(f,''); if(!token) return setErr(f, 'Token girin.');
+  busy(f, true, 'Kontrol ediliyor…');
+  try {
+    S.cfg.token = token;
+    await GH.repo(S.cfg, siteRepo(S.cfg)); if(S.cfg.dataRepo) await GH.repo(S.cfg, S.cfg.dataRepo);
+    await storeVault(await buildVault());
+    await loadData(); startApp(); toast('Token güncellendi.');
+  } catch(e){ setErr(f, e.message); busy(f, false); }
+}
+
+/* ================== Uygulama kabuğu ================== */
+function startApp(){
+  $app.innerHTML = `<header class="top"><div class="top-in">
+      <div class="brand"><div class="logo">${ICON.book}</div><span>Akademik Takip</span></div>
+      <nav class="tabs" id="tabs"></nav>
+      <div class="top-actions">
+        <span class="savestate ok" id="saveState">Kaydedildi</span>
+        <button class="btn primary" data-act="new"><span>+</span><span class="hide-sm">Yeni kayıt</span></button>
+        <button class="icon" data-act="view" data-view="ayarlar" title="Ayarlar" aria-label="Ayarlar">${ICON.gear}</button>
+        <button class="icon" data-act="lock" title="Kilitle" aria-label="Kilitle">${ICON.lock}</button>
+      </div></div></header>
+    <main id="main"></main>`;
+  setSaveState(S.saveState || 'ok');
+  bumpLock();
+  renderMain();
+}
+function renderTabs(){
+  const cnt = t => S.db.items.filter(i => i.type === t).length;
+  const tabs = [['panel','Genel bakış'], ...Object.entries(TYPES).map(([k,v]) => [k, v.plural, cnt(k)])];
+  $('#tabs').innerHTML = tabs.map(([k,l,c]) => `<button class="tab ${S.view===k?'on':''}" data-act="view" data-view="${k}">${l}${c!=null?`<span class="cnt">${c}</span>`:''}</button>`).join('');
+}
+function renderMain(){
+  if(!S.db || !$('#main')) return;
+  renderTabs();
+  const m = $('#main');
+  if(S.view === 'panel') m.innerHTML = viewPanel();
+  else if(S.view === 'ayarlar') m.innerHTML = viewSettings();
+  else { m.innerHTML = viewListShell(S.view); renderList(); }
+}
+
+/* ================== Kayıt yardımcıları ================== */
+const find = id => S.db.items.find(i => i.id === id);
+const statusOf = it => TYPES[it.type].statuses.find(s => s.k === it.status) || { k:it.status, t:it.status || '—', c:'draft' };
+const cat = it => statusOf(it).c;
+const sortHist = it => it.history.sort((a,b) => a.d < b.d ? -1 : a.d > b.d ? 1 : 0);
+const lastDate = it => it.history.reduce((m,h) => h.d > m ? h.d : m, '') || it.submitDate || '';
+const badge = st => `<span class="badge c-${st.c}">${esc(st.t)}</span>`;
+const tchip = it => `<span class="tchip t-${it.type}">${TYPES[it.type].label}</span>`;
+function dueCls(d){ const n = daysBetween(todayISO(), d); return n < 0 ? 'due-over' : n <= 7 ? 'due-soon' : ''; }
+function venueOptions(type){
+  const used = S.db.items.filter(i => i.type === type && i.venue).map(i => i.venue);
+  return [...new Set([...used, ...TYPES[type].venueList])].map(v => `<option value="${esc(v)}">`).join('');
+}
+
+/* ================== Genel bakış ================== */
+function viewPanel(){
+  const items = S.db.items, T = todayISO();
+  const stats = Object.entries(TYPES).map(([k,t]) => {
+    const its = items.filter(i => i.type === k);
+    const by = c => its.filter(i => cat(i) === c).length;
+    const chips = CAT_ORDER.filter(c => by(c)).map(c => `<span class="badge c-${c}">${CATS[c]} ${by(c)}</span>`).join('');
+    return `<button class="stat" style="--tc:var(--${k})" data-act="view" data-view="${k}">
+      <div class="tchip t-${k}">${t.plural}</div><div class="num">${its.length}</div>
+      <div class="row">${chips || '<span class="muted small">Henüz kayıt yok</span>'}</div></button>`;
+  }).join('');
+
+  const action = items.filter(i => cat(i) === 'action').sort((a,b) => (a.nextDate||'9') < (b.nextDate||'9') ? -1 : 1);
+  const dues = items.filter(i => i.nextDate && cat(i) !== 'fail' && daysBetween(T, i.nextDate) <= 30).sort((a,b) => a.nextDate < b.nextDate ? -1 : 1);
+  const stale = items.filter(i => cat(i) === 'active' && lastDate(i) && ago(lastDate(i)) >= STALE_DAYS).sort((a,b) => lastDate(a) < lastDate(b) ? -1 : 1);
+  const recent = items.flatMap(it => it.history.map(h => ({it,h}))).reverse().sort((a,b) => a.h.d < b.h.d ? 1 : a.h.d > b.h.d ? -1 : 0).slice(0,10);
+
+  const mini = (it, right, sub) => `<button class="mini" data-act="open" data-id="${it.id}">${tchip(it)}
+    <span style="min-width:0"><span class="mini-title">${esc(it.title || '(başlıksız)')}</span><span class="mini-sub">${sub ?? esc(it.venue || '')}</span></span>
+    <span class="mini-right">${right}</span></button>`;
+  const panel = (title, list, empty, n) => `<section class="card panel"><h2>${title}${n ? `<span class="n">${n}</span>` : ''}</h2>${list || `<div class="empty">${empty}</div>`}</section>`;
+
+  return `<div class="page-head"><div><h1>Genel bakış</h1><p class="muted" style="margin:4px 0 0">${items.length ? `${items.length} kayıt · süreci devam eden ${items.filter(i => ['active','action'].includes(cat(i))).length}` : 'Henüz kayıt yok. Sağ üstteki “Yeni kayıt” ile başlayın.'}</p></div></div>
+    <div class="stats">${stats}</div>
+    <div class="panels">
+      ${panel('Aksiyon bekleyenler', action.map(i => mini(i, badge(statusOf(i)))).join(''), 'Sizden bir şey bekleyen süreç yok.', action.length)}
+      ${panel('Yaklaşan / geçmiş tarihler', dues.map(i => mini(i, `<span class="${dueCls(i.nextDate)}">${fmt(i.nextDate)}<br>${rel(ago(i.nextDate))}</span>`, esc(i.nextLabel || 'Sonraki tarih'))).join(''), 'Önümüzdeki 30 günde tarih yok.', dues.length)}
+      ${panel(`${STALE_DAYS}+ gündür haber yok`, stale.map(i => mini(i, `${ago(lastDate(i))} gün`, `${esc(statusOf(i).t)} · ${esc(i.venue||'')}`)).join(''), 'Uzun süredir sessiz kalan süreç yok.', stale.length)}
+      ${panel('Son hareketler', recent.map(({it,h}) => { const st = TYPES[it.type].statuses.find(s => s.k === h.s); return mini(it, fmt(h.d), esc((st ? st.t : h.s) + (h.n ? ' · ' + h.n : ''))); }).join(''), 'Henüz hareket yok.')}
+    </div>`;
+}
+
+/* ================== Liste ================== */
+function flt(type){ return S.filters[type] || (S.filters[type] = { q:'', fs:'', sort:'last' }); }
+function viewListShell(type){
+  const t = TYPES[type], f = flt(type);
+  const opts = t.statuses.map(s => `<option value="${s.k}" ${f.fs===s.k?'selected':''}>${esc(s.t)}</option>`).join('');
+  return `<div class="page-head"><div><h1>${t.plural}</h1></div>
+      <button class="btn primary" data-act="new" data-type="${type}">+ Yeni ${lower(t.label)}</button></div>
+    <div class="toolbar">
+      <input type="search" id="q" placeholder="Başlık, ${lower(t.venue)}, yazar, not ara…" value="${esc(f.q)}">
+      <select id="fs"><option value="">Tüm durumlar</option>
+        <optgroup label="Gruplar">${CAT_ORDER.map(c => `<option value="@${c}" ${f.fs==='@'+c?'selected':''}>${CATS[c]}</option>`).join('')}<option value="@open" ${f.fs==='@open'?'selected':''}>Süreci devam edenler</option></optgroup>
+        <optgroup label="Durumlar">${opts}</optgroup></select>
+      <select id="sort">
+        ${[['last','Son harekete göre'],['submit','Gönderim tarihine göre'],['status','Duruma göre'],['title','Başlığa göre']].map(([v,l]) => `<option value="${v}" ${f.sort===v?'selected':''}>${l}</option>`).join('')}
+      </select>
+    </div>
+    <div class="sumrow" id="sumrow"></div>
+    <div id="list" class="items"></div>`;
+}
+function renderList(){
+  const type = S.view, f = flt(type), q = lower(f.q).trim();
+  const all = S.db.items.filter(i => i.type === type);
+  $('#sumrow').innerHTML = CAT_ORDER.map(c => { const n = all.filter(i => cat(i) === c).length; return n ? `<button class="badge c-${c} ${f.fs==='@'+c?'on':''}" data-act="catFilter" data-cat="${c}">${CATS[c]} ${n}</button>` : ''; }).join('');
+  let list = all.filter(i => {
+    if(f.fs === '@open'){ if(!['active','action'].includes(cat(i))) return false; }
+    else if(f.fs.startsWith('@')){ if(cat(i) !== f.fs.slice(1)) return false; }
+    else if(f.fs && i.status !== f.fs) return false;
+    if(!q) return true;
+    return lower([i.title, i.venue, i.refNo, i.coauthors, i.notes, i.doi, i.location].join(' ')).includes(q);
+  });
+  const by = {
+    last:(a,b) => lastDate(b).localeCompare(lastDate(a)),
+    submit:(a,b) => (b.submitDate||'').localeCompare(a.submitDate||''),
+    title:(a,b) => (a.title||'').localeCompare(b.title||'', 'tr'),
+    status:(a,b) => CAT_ORDER.indexOf(cat(a)) - CAT_ORDER.indexOf(cat(b)) || lastDate(b).localeCompare(lastDate(a))
+  };
+  list.sort(by[f.sort] || by.last);
+  $('#list').innerHTML = list.length ? list.map(card).join('') :
+    `<div class="emptybox" style="grid-column:1/-1">${all.length ? 'Filtreye uyan kayıt yok.' : `Henüz ${lower(TYPES[type].label)} kaydı yok.`}</div>`;
+}
+function card(it){
+  const st = statusOf(it), last = lastDate(it), url = safeUrl(it.link);
+  return `<article class="card item" style="--sc:var(--${st.c})" data-act="open" data-id="${it.id}">
+    <div class="item-top">${badge(st)}<span class="muted small">${esc(it.refNo || '')}</span></div>
+    <h3>${esc(it.title || '(başlıksız)')}</h3>
+    <div class="venue">${esc(it.venue || '—')}${it.index ? ' · ' + esc(it.index) : ''}${it.role ? ' · ' + esc(it.role) : ''}</div>
+    <div class="meta">
+      ${it.submitDate ? `<span>Gönderim ${fmt(it.submitDate)} · ${dur(ago(it.submitDate))}</span>` : ''}
+      ${last ? `<span>Son hareket ${rel(ago(last))}</span>` : ''}
+      ${it.nextDate && st.c !== 'fail' ? `<span class="${dueCls(it.nextDate)}">${esc(it.nextLabel || 'Sonraki tarih')}: ${fmt(it.nextDate)} (${rel(ago(it.nextDate))})</span>` : ''}
+    </div>
+    ${url ? `<a class="ext" href="${esc(url)}" target="_blank" rel="noopener noreferrer">Sisteme git ↗</a>` : ''}
+  </article>`;
+}
+
+/* ================== Modal ================== */
+function openModal(html, wide){
+  const m = $('#modal');
+  m.innerHTML = `<div class="backdrop" data-act="backdrop"><div class="dialog ${wide ? 'wide' : ''}" role="dialog" aria-modal="true">${html}</div></div>`;
+  m.classList.remove('hidden'); document.body.classList.add('noscroll');
+}
+function closeModal(){ const m = $('#modal'); m.classList.add('hidden'); m.innerHTML = ''; document.body.classList.remove('noscroll'); }
+
+/* ================== Kayıt formu ================== */
+function field(f, it){
+  const v = it[f.k] ?? '', id = 'f_' + f.k;
+  let input;
+  if(f.type === 'select') input = `<select id="${id}" name="${f.k}">${f.opts.map(o => { const [val,lab] = Array.isArray(o) ? o : [o, o || '—']; return `<option value="${esc(val)}" ${val===v?'selected':''}>${esc(lab)}</option>`; }).join('')}</select>`;
+  else if(f.type === 'textarea') input = `<textarea id="${id}" name="${f.k}" placeholder="${esc(f.ph||'')}">${esc(v)}</textarea>`;
+  else {
+    const type = f.type === 'url' ? 'text' : (f.type || 'text');
+    input = `<input id="${id}" name="${f.k}" type="${type}" value="${esc(v)}" ${f.type==='url'?'inputmode="url"':''} ${f.list?`list="${f.list}"`:''} ${f.req?'required':''} placeholder="${esc(f.ph || (f.type==='url'?'https://…':''))}">`;
+  }
+  return `<label class="fld ${f.full ? 'full' : ''}" for="${id}"><span>${esc(f.t)}</span>${input}</label>`;
+}
+function itemFormHtml(it, isNew){
+  const t = TYPES[it.type];
+  return `<form id="itemForm" class="form" data-id="${isNew ? '' : it.id}">
+    <div class="dlg-head"><h2>${isNew ? 'Yeni kayıt' : 'Kaydı düzenle'}</h2><button type="button" class="x" data-act="closeModal" aria-label="Kapat">×</button></div>
+    ${isNew ? `<fieldset class="seg">${Object.entries(TYPES).map(([k,v]) => `<label><input type="radio" name="type" value="${k}" ${k===it.type?'checked':''}><span>${v.label}</span></label>`).join('')}</fieldset>` : `<input type="hidden" name="type" value="${it.type}">`}
+    <div class="grid">
+      ${field({k:'title', t:it.type==='proje'?'Proje adı':'Başlık', full:true, req:true}, it)}
+      ${field({k:'venue', t:t.venue, list:'venues'}, it)}
+      ${field({k:'status', t:'Durum', type:'select', opts:t.statuses.map(s => [s.k, s.t])}, it)}
+      ${field({k:'submitDate', t:it.type==='proje'?'Başvuru tarihi':'Gönderim tarihi', type:'date'}, it)}
+      ${field({k:'refNo', t:t.refLabel}, it)}
+      ${field({k:'link', t:t.linkLabel, type:'url', full:true}, it)}
+      ${field({k:'docLink', t:'Dosya linki (Drive, OneDrive…)', type:'url', full:true}, it)}
+      ${field({k:'coauthors', t:it.type==='proje'?'Proje ekibi':'Yazarlar', full:true}, it)}
+      ${t.extra.map(f => field(f, it)).join('')}
+      ${field({k:'nextDate', t:'Sonraki önemli tarih', type:'date'}, it)}
+      ${field({k:'nextLabel', t:'Bu tarih ne?', ph:'ör. Revizyon son günü'}, it)}
+      ${field({k:'notes', t:'Notlar', type:'textarea', full:true}, it)}
+    </div>
+    <datalist id="venues">${venueOptions(it.type)}</datalist>
+    <div class="dlg-foot"><button type="button" class="btn" data-act="closeModal">Vazgeç</button><button class="btn primary" type="submit">Kaydet</button></div>
+  </form>`;
+}
+function openNew(type){
+  type = TYPES[type] ? type : (TYPES[S.view] ? S.view : 'makale');
+  openModal(itemFormHtml({ type, status:TYPES[type].statuses[1].k, submitDate:todayISO() }, true), true);
+  setTimeout(() => { const i = $('#f_title'); if(i) i.focus(); }, 30);
+}
+function switchFormType(f, type){
+  const fd = Object.fromEntries(new FormData(f));
+  const it = { ...fd, type, status: TYPES[type].statuses[1].k };
+  openModal(itemFormHtml(it, true), true);
+}
+function onItemForm(f){
+  const fd = Object.fromEntries(new FormData(f)), id = f.dataset.id, now = new Date().toISOString();
+  if(!(fd.title||'').trim()) return toast('Başlık gerekli.', 'err');
+  const apply = it => { for(const [k,v] of Object.entries(fd)){ if(k === 'type' && id) continue; const s = String(v).trim(); if(s) it[k] = s; else delete it[k]; } };
+  if(!id){
+    const it = { id:uid(), createdAt:now, history:[] }; apply(it); it.updatedAt = now;
+    it.history.push({ id:uid(), d: it.submitDate || todayISO(), s: it.status, n:'Kayıt oluşturuldu' });
+    S.db.items.push(it); closeModal(); persist(); renderMain(); toast('Kayıt eklendi.');
+    openDetail(it.id);
+  } else {
+    const it = find(id); if(!it) return closeModal();
+    const prev = it.status; apply(it); it.updatedAt = now;
+    if(prev !== it.status){ it.history.push({ id:uid(), d:todayISO(), s:it.status, n:'Durum düzenleme ile değiştirildi' }); sortHist(it); }
+    persist(); renderMain(); openDetail(id);
+  }
+}
+
+/* ================== Ayrıntı ================== */
+function openDetail(id){
+  const it = find(id); if(!it) return;
+  const t = TYPES[it.type], st = statusOf(it);
+  const rows = [
+    [t.venue, it.venue], [t.refLabel, it.refNo],
+    [it.type==='proje' ? 'Başvuru tarihi' : 'Gönderim tarihi', it.submitDate && `${fmt(it.submitDate)} · ${ago(it.submitDate) > 0 ? dur(ago(it.submitDate)) + ' önce' : rel(ago(it.submitDate))}`],
+    ['Son hareket', lastDate(it) && rel(ago(lastDate(it)))],
+    [it.type==='proje' ? 'Proje ekibi' : 'Yazarlar', it.coauthors],
+    ...t.extra.map(f => [f.t, f.type === 'date' ? fmt(it[f.k]) : it[f.k]]),
+    [it.nextLabel || 'Sonraki tarih', it.nextDate && `<span class="${dueCls(it.nextDate)}">${fmt(it.nextDate)} (${rel(ago(it.nextDate))})</span>`, true]
+  ].filter(r => r[1]);
+  const links = [[t.linkLabel, it.link], ['Dosya', it.docLink], ['DOI', it.doi && (/^10\./.test(it.doi) ? 'https://doi.org/' + it.doi : it.doi)]]
+    .map(([l,u]) => [l, safeUrl(u)]).filter(r => r[1]);
+  const hist = [...it.history].reverse().sort((a,b) => a.d < b.d ? 1 : a.d > b.d ? -1 : 0);
+  openModal(`
+    <div class="dlg-head"><div style="min-width:0"><div class="drow">${tchip(it)}${badge(st)}</div><div class="dtitle">${esc(it.title || '(başlıksız)')}</div></div>
+      <button type="button" class="x" data-act="closeModal" aria-label="Kapat">×</button></div>
+    <div class="dlg-body">
+      <div class="drow">
+        ${links.map(([l,u]) => `<a class="btn" href="${esc(u)}" target="_blank" rel="noopener noreferrer">${esc(l)} ↗</a>`).join('')}
+        <span style="flex:1"></span>
+        <button class="btn" data-act="edit" data-id="${it.id}">Düzenle</button>
+        <button class="btn danger" data-act="delItem" data-id="${it.id}">Sil</button>
+      </div>
+      ${rows.length ? `<dl class="kv">${rows.map(([k,v,raw]) => `<dt>${esc(k)}</dt><dd>${raw ? v : esc(v)}</dd>`).join('')}</dl>` : ''}
+      ${it.notes ? `<div class="notes">${esc(it.notes)}</div>` : ''}
+      <form class="box" id="evForm" data-id="${it.id}">
+        <h3>Durum güncellemesi ekle</h3>
+        <div class="evform">
+          <label class="fld"><span>Tarih</span><input type="date" name="d" value="${todayISO()}" required></label>
+          <label class="fld"><span>Yeni durum</span><select name="s">${t.statuses.map(s => `<option value="${s.k}" ${s.k===it.status?'selected':''}>${esc(s.t)}</option>`).join('')}</select></label>
+          <label class="fld full"><span>Not <small>ör. editör e-postası, hakem sayısı, istenen düzeltmeler</small></span><textarea name="n" style="min-height:60px"></textarea></label>
+          <label class="fld"><span>Sonraki tarih</span><input type="date" name="nextDate" value="${esc(it.nextDate||'')}"></label>
+          <label class="fld"><span>Bu tarih ne?</span><input type="text" name="nextLabel" value="${esc(it.nextLabel||'')}" placeholder="ör. Revizyon son günü"></label>
+        </div>
+        <div style="display:flex;justify-content:flex-end;margin-top:10px"><button class="btn primary" type="submit">Ekle</button></div>
+      </form>
+      <div><h3 style="margin-bottom:10px">Süreç geçmişi</h3>
+        ${hist.length ? `<ul class="tl">${hist.map(h => { const s = t.statuses.find(x => x.k === h.s) || {t:h.s, c:'draft'};
+          return `<li style="color:var(--${s.c})"><span class="dot"></span><div style="color:var(--text)">
+            <button class="del" data-act="delEv" data-id="${it.id}" data-ev="${h.id}" title="Bu adımı sil">sil</button>
+            <div class="when">${fmt(h.d)} · ${rel(ago(h.d))}</div><div><span class="badge c-${s.c}">${esc(s.t)}</span></div>
+            ${h.n ? `<div class="n">${esc(h.n)}</div>` : ''}</div></li>`; }).join('')}</ul>` : '<p class="muted">Henüz kayıt yok.</p>'}
+      </div>
+    </div>`, true);
+}
+function onEvForm(f){
+  const it = find(f.dataset.id); if(!it) return;
+  const fd = Object.fromEntries(new FormData(f));
+  if(!fd.d) return toast('Tarih gerekli.', 'err');
+  it.history.push({ id:uid(), d:fd.d, s:fd.s, n:(fd.n||'').trim() });
+  sortHist(it); it.status = it.history[it.history.length-1].s;
+  const nd = (fd.nextDate||'').trim(), nl = (fd.nextLabel||'').trim();
+  if(nd) it.nextDate = nd; else delete it.nextDate;
+  if(nl) it.nextLabel = nl; else delete it.nextLabel;
+  it.updatedAt = new Date().toISOString();
+  persist(); renderMain(); openDetail(it.id); toast('Güncelleme eklendi.');
+}
+
+/* ================== Ayarlar ================== */
+function lockMin(){ const n = parseInt(lsGet(LS.lock), 10); return n > 0 ? n : 30; }
+function viewSettings(){
+  const c = S.cfg, gh = c.storage === 'github';
+  return `<div class="page-head"><h1>Ayarlar</h1></div><div class="set">
+    <section class="card"><h2>Depolama</h2>
+      ${gh ? `<dl class="kv"><dt>Site deposu</dt><dd>${esc(siteRepo(c))} (${esc(c.branch)})</dd><dt>Kasa dosyası</dt><dd><code>${esc(vaultPath(c))}</code></dd>
+        <dt>Veri deposu</dt><dd>${esc(dataRepo())}</dd><dt>Veri dosyası</dt><dd><code>${esc(c.dataPath)}</code></dd>
+        <dt>Son güncelleme</dt><dd>${S.db.updatedAt ? new Date(S.db.updatedAt).toLocaleString('tr-TR') : '—'}</dd></dl>`
+      : `<p>Veriler <b>yalnızca bu tarayıcıda</b> şifreli olarak duruyor. Başka cihazdan erişemezsiniz ve tarayıcı verisi silinirse kaybolur. Kalıcı kullanım için yedek alıp GitHub kurulumuna geçin (Girişte “Yeni kurulum yap”, ardından yedeği içe aktarın).</p>`}
+      <div class="btns">
+        <button class="btn" data-act="pwChange">Şifreyi değiştir</button>
+        ${gh ? '<button class="btn" data-act="tokenChange">Token’ı güncelle</button><button class="btn" data-act="reload">Veriyi yeniden yükle</button>' : ''}
+      </div></section>
+    <section class="card"><h2>Yedek</h2>
+      <p class="muted small" style="margin:0">Şifresiz yedek her şeyi açık metin içerir; güvenli bir yerde saklayın.</p>
+      <div class="btns">
+        <button class="btn" data-act="exportPlain">Yedek indir (JSON)</button>
+        <button class="btn" data-act="exportCsv">Tablo indir (CSV)</button>
+        <button class="btn" data-act="importJson">Yedekten içe aktar</button>
+        <input type="file" id="importFile" accept=".json,application/json" hidden>
+      </div></section>
+    <section class="card"><h2>Oturum ve görünüm</h2>
+      <div class="grid" style="max-width:480px">
+        <label class="fld"><span>Hareketsiz kalınca kilitle</span><select id="lockSel">${[5,15,30,60,120].map(n => `<option value="${n}" ${lockMin()===n?'selected':''}>${n} dakika</option>`).join('')}</select></label>
+        <label class="fld"><span>Tema</span><select id="themeSel">${[['','Sistem'],['light','Açık'],['dark','Koyu']].map(([v,l]) => `<option value="${v}" ${(lsGet(LS.theme)||'')===v?'selected':''}>${l}</option>`).join('')}</select></label>
+      </div>
+      <div class="btns"><button class="btn danger" data-act="forgetDevice">Bu cihazdaki kayıtlı kasayı sil</button></div>
+      <p class="muted small">Kasa (şifreli ayarlar) bu tarayıcıda da önbelleğe alınır. Ortak bir bilgisayarda kullandıysanız silin.</p></section>
+    <section class="card"><h2>Güvenlik notu</h2><p class="muted small" style="margin:0">Veriler tarayıcıda AES-256-GCM ile şifrelenir; anahtar şifrenizden PBKDF2 (${S.iter.toLocaleString('tr-TR')} tur) ile türetilir. GitHub'a yalnızca şifreli içerik gider. Depo herkese açıksa şifreli dosyalar görülebilir ama okunamaz; bu yüzden uzun ve tahmin edilmesi zor bir şifre kullanın ve veriyi ayrı bir private depoda tutun.</p></section>
+  </div>`;
+}
+function pwModal(){
+  openModal(`<form id="pwForm"><div class="dlg-head"><h2>Şifreyi değiştir</h2><button type="button" class="x" data-act="closeModal">×</button></div>
+    <div class="dlg-body"><label class="fld"><span>Mevcut şifre</span><input type="password" name="cur" autocomplete="current-password"></label>
+    <label class="fld"><span>Yeni şifre <small>en az 10 karakter</small></span><input type="password" name="pw" autocomplete="new-password"></label>
+    <label class="fld"><span>Yeni şifre (tekrar)</span><input type="password" name="pw2" autocomplete="new-password"></label><div class="err"></div></div>
+    <div class="dlg-foot"><button type="button" class="btn" data-act="closeModal">Vazgeç</button><button class="btn primary" type="submit">Değiştir</button></div></form>`);
+}
+async function onPwForm(f){
+  const fd = Object.fromEntries(new FormData(f)); setErr(f,'');
+  if((fd.pw||'').length < 10) return setErr(f, 'Yeni şifre en az 10 karakter olmalı.');
+  if(fd.pw !== fd.pw2) return setErr(f, 'Yeni şifreler eşleşmiyor.');
+  busy(f, true, 'Değiştiriliyor…');
+  try {
+    const k = await deriveKey(fd.cur, unb64(S.salt), S.iter);
+    try { await decryptJSON(k, S.vault); } catch { throw new Error('Mevcut şifre hatalı.'); }
+    await flush();
+    const old = { key:S.key, salt:S.salt, iter:S.iter };
+    const salt = crypto.getRandomValues(new Uint8Array(16));
+    S.key = await deriveKey(fd.pw, salt, ITER); S.salt = b64(salt); S.iter = ITER;
+    try { await storeVault(await buildVault()); await saveNow(); }
+    catch(e){ Object.assign(S, old); throw e; }
+    closeModal(); toast('Şifre değiştirildi.');
+  } catch(e){ setErr(f, e.message); busy(f, false); }
+}
+function tokenModal(){
+  openModal(`<form id="tokenForm"><div class="dlg-head"><h2>GitHub token’ını güncelle</h2><button type="button" class="x" data-act="closeModal">×</button></div>
+    <div class="dlg-body"><label class="fld"><span>Yeni token</span><input type="password" name="token" placeholder="github_pat_…" autocomplete="off"></label><div class="err"></div></div>
+    <div class="dlg-foot"><button type="button" class="btn" data-act="closeModal">Vazgeç</button><button class="btn primary" type="submit">Kaydet</button></div></form>`);
+}
+async function onTokenForm(f){
+  const token = f.token.value.trim(); setErr(f,''); if(!token) return setErr(f, 'Token girin.');
+  busy(f, true, 'Kontrol ediliyor…');
+  const old = S.cfg.token;
+  try {
+    S.cfg.token = token;
+    await GH.repo(S.cfg, siteRepo(S.cfg)); if(S.cfg.dataRepo) await GH.repo(S.cfg, S.cfg.dataRepo);
+    await storeVault(await buildVault());
+    closeModal(); toast('Token güncellendi.');
+  } catch(e){ S.cfg.token = old; setErr(f, e.message); busy(f, false); }
+}
+function download(name, text, type){
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([text], {type})); a.download = name;
+  document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+}
+function exportCsv(){
+  const cols = [['type','Tür'],['title','Başlık'],['venue','Dergi/Kongre/Program'],['status','Durum'],['submitDate','Gönderim'],['refNo','No'],['coauthors','Yazarlar/Ekip'],['index','Dizin'],['role','Rol'],['budget','Bütçe'],['link','Link'],['doi','DOI'],['nextDate','Sonraki tarih'],['nextLabel','Sonraki tarih açıklama'],['notes','Notlar']];
+  const cell = v => `"${String(v ?? '').replace(/"/g,'""')}"`;
+  const rows = S.db.items.map(it => cols.map(([k]) => k === 'type' ? TYPES[it.type].label : k === 'status' ? statusOf(it).t : it[k]).map(cell).join(';'));
+  download(`akademik-${todayISO()}.csv`, '\ufeff' + [cols.map(c => cell(c[1])).join(';'), ...rows].join('\r\n'), 'text/csv;charset=utf-8');
+}
+async function importFile(file){
+  try {
+    const j = JSON.parse(await file.text());
+    let db;
+    if(j && j.ct && j.iv && !j.salt){ try { db = await decryptJSON(S.key, j); } catch { throw new Error('Şifreli yedek bu şifreyle çözülemedi.'); } }
+    else db = j;
+    if(!db || !Array.isArray(db.items)) throw new Error('Bu dosya geçerli bir yedek değil.');
+    db = normalizeDb(db);
+    if(!confirm(`${db.items.length} kayıt bulundu. Mevcut verilerle birleştirilsin mi? (Aynı kayıtlarda en son düzenlenen kalır.)`)) return;
+    S.db = mergeDb(S.db, db); persist(); renderMain(); toast('İçe aktarıldı.');
+  } catch(e){ toast(e.message, 'err'); }
+}
+
+/* ================== Kilit ================== */
+let lockTimer;
+function bumpLock(){ if(!S.key) return; clearTimeout(lockTimer); lockTimer = setTimeout(lock, lockMin()*60000); }
+async function lock(msg){
+  clearTimeout(lockTimer);
+  if(S.db) { try { await flush(); } catch {} }
+  S.key = null; S.cfg = null; S.db = null; S.sha = null; S.filters = {};
+  closeModal(); renderLogin(typeof msg === 'string' ? msg : 'Oturum kilitlendi.');
+}
+
+/* ================== Olaylar ================== */
+const ACTS = {
+  closeModal:() => closeModal(),
+  goSetup:() => renderSetup(true),
+  backLogin:() => renderLogin(),
+  lock:() => lock(),
+  view:el => { S.view = el.dataset.view; closeModal(); renderMain(); window.scrollTo(0,0); },
+  new:el => openNew(el.dataset.type),
+  open:el => openDetail(el.dataset.id),
+  edit:el => { const it = find(el.dataset.id); if(it) openModal(itemFormHtml(it, false), true); },
+  delItem:el => { const it = find(el.dataset.id); if(!it || !confirm(`“${it.title}” silinsin mi? Bu işlem geri alınamaz.`)) return;
+    S.db.items = S.db.items.filter(i => i.id !== it.id); S.db.deleted.push(it.id); persist(); closeModal(); renderMain(); toast('Silindi.'); },
+  delEv:el => { const it = find(el.dataset.id); if(!it || !confirm('Bu süreç adımı silinsin mi?')) return;
+    it.history = it.history.filter(h => h.id !== el.dataset.ev); if(it.history.length) it.status = sortHist(it)[it.history.length-1].s;
+    it.updatedAt = new Date().toISOString(); persist(); renderMain(); openDetail(it.id); },
+  catFilter:el => { const f = flt(S.view), v = '@' + el.dataset.cat; f.fs = f.fs === v ? '' : v; const s = $('#fs'); if(s) s.value = f.fs; renderList(); },
+  pwChange:() => pwModal(),
+  tokenChange:() => tokenModal(),
+  reload:async () => { try { await flush(); await loadData(); renderMain(); toast('Veriler yeniden yüklendi.'); } catch(e){ toast(e.message,'err'); } },
+  exportPlain:() => download(`akademik-yedek-${todayISO()}.json`, JSON.stringify(S.db, null, 2), 'application/json'),
+  exportCsv:() => exportCsv(),
+  importJson:() => $('#importFile').click(),
+  forgetDevice:() => { if(!confirm('Bu cihazdaki kasa önbelleği silinsin mi? (GitHub kurulumunda depodaki kasa durur.)')) return;
+    lsDel(LS.vault); if(S.cfg.storage === 'local'){ if(!confirm('Yerel modda bu işlem tüm verileri siler. Emin misiniz?')) return; lsDel(LS.data); }
+    S.vault = null; lock('Bu cihazdaki kasa silindi.').then(boot); },
+  conflictRemote:async () => { try { await loadData(); closeModal(); renderMain(); toast('Uzaktaki sürüm yüklendi.'); } catch(e){ toast(e.message,'err'); } },
+  conflictMerge:async () => { try { const r = await readRemote(); if(r){ S.db = mergeDb(await decodeData(r.text), S.db); S.sha = r.sha; } closeModal(); await saveNow(); renderMain(); toast('Birleştirildi ve kaydedildi.'); } catch(e){ toast(e.message,'err'); } }
+};
+document.addEventListener('click', e => {
+  if(e.target.closest('a[href]')) return;
+  if(e.target.dataset && e.target.dataset.act === 'backdrop'){ closeModal(); return; }
+  const el = e.target.closest('[data-act]:not([data-act=backdrop])'); if(!el) return;
+  const fn = ACTS[el.dataset.act]; if(fn){ e.preventDefault(); fn(el, e); }
+});
+const FORMS = { setupForm:onSetup, loginForm:onLogin, renewForm:onRenew, itemForm:onItemForm, evForm:onEvForm, pwForm:onPwForm, tokenForm:onTokenForm };
+document.addEventListener('submit', e => { const fn = FORMS[e.target.id]; if(fn){ e.preventDefault(); fn(e.target); } });
+document.addEventListener('input', e => {
+  const id = e.target.id; if(!TYPES[S.view]) return;
+  if(id === 'q'){ flt(S.view).q = e.target.value; renderList(); }
+});
+document.addEventListener('change', e => {
+  const t = e.target;
+  if(t.name === 'storage'){ $('#ghFields').classList.toggle('hidden', t.value !== 'github'); return; }
+  if(t.name === 'type' && t.form && t.form.id === 'itemForm' && !t.form.dataset.id){ switchFormType(t.form, t.value); return; }
+  if(t.id === 'fs' || t.id === 'sort'){ flt(S.view)[t.id] = t.value; renderList(); return; }
+  if(t.id === 'lockSel'){ lsSet(LS.lock, t.value); bumpLock(); toast('Kaydedildi.'); return; }
+  if(t.id === 'themeSel'){ lsSet(LS.theme, t.value); applyTheme(); return; }
+  if(t.id === 'importFile' && t.files[0]){ importFile(t.files[0]); t.value = ''; }
+});
+document.addEventListener('keydown', e => { if(e.key === 'Escape' && !$('#modal').classList.contains('hidden')) closeModal(); });
+['click','keydown','touchstart','scroll'].forEach(ev => document.addEventListener(ev, bumpLock, {passive:true}));
+window.addEventListener('beforeunload', e => { if(S.key && (S.dirty || S.saveState === 'saving')){ e.preventDefault(); e.returnValue = ''; } });
+
+function applyTheme(){ const t = lsGet(LS.theme); if(t) document.documentElement.dataset.theme = t; else delete document.documentElement.dataset.theme; }
+
+async function boot(){
+  applyTheme();
+  if(!window.crypto || !crypto.subtle){ $app.innerHTML = '<div class="spin">Bu sayfa güvenli bağlantı (https) gerektirir.</div>'; return; }
+  $app.innerHTML = '<div class="spin">Yükleniyor…</div>';
+  const v = await fetchVault();
+  if(!v) return renderSetup(false);
+  S.vault = v; renderLogin();
+}
+boot();
+</script>
+</body>
+</html>
